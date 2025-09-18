@@ -67,12 +67,24 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    alsa-lib.dev
+    udev.dev
+    udev 
+    alsa-lib-with-plugins
+    vulkan-loader
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi 
+    xorg.libXrandr # To use the x11 feature
+    libxkbcommon
+    wayland # To use the wayland feature
     git
     bluez-tools
     bluez
     go
     gcc
     libtool
+    systemd
     wasm-bindgen-cli_0_2_100
     pkg-config
     gobject-introspection
@@ -171,7 +183,16 @@
   
   security.sudo.enable = true;
   
+ 
   environment.sessionVariables = {
+    PKG_CONFIG_PATH = [
+      "${pkgs.alsa-lib}/lib/pkgconfig"
+      "${pkgs.pkg-config}/lib/pkgconfig"
+      "${pkgs.systemd}/lib/pkgconfig"
+    ];
+    PKG_CONFIG_ALLOW_SYSTEM_LIBS = "1";
+    PKG_CONFIG_ALLOW_SYSTEM_CFLAGS = "1";
+    LD_LIBRARY_PATH = "/usr/lib:/usr/local/lib:/opt/custom/lib";
     PATH="/home/user23/.cargo/bin";
   };
 
